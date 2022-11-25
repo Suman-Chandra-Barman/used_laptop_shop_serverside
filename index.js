@@ -29,7 +29,11 @@ const dbConnect = async () => {
 };
 dbConnect();
 
+// collection
 const brandCollection = client.db("usedLaptop").collection("category");
+const bookingCollection = client.db("usedLaptop").collection("booking");
+const userCollection = client.db("usedLaptop").collection("users");
+const productCollection = client.db("usedLaptop").collection("products");
 
 app.get("/category", async (req, res) => {
   const query = {};
@@ -42,6 +46,32 @@ app.get("/category/:id", async (req, res) => {
   const query = { brand: { $in: [id] } };
   const category = await brandCollection.find(query).toArray();
   res.send(category);
+});
+
+app.post("/booking", async (req, res) => {
+  const booking = req.body;
+  const result = await bookingCollection.insertOne(booking);
+  res.send(result);
+});
+app.get("/users", async (req, res) => {
+  try {
+    const userEmail = req.query.email;
+    const query = { email: userEmail };
+    const user = await userCollection.findOne(query);
+    res.send(user);
+  } catch (error) {
+    console.log(error);
+  }
+});
+app.post("/users", async (req, res) => {
+  const booking = req.body;
+  const result = await userCollection.insertOne(booking);
+  res.send(result);
+});
+app.post("/dashboard/products", async (req, res) => {
+  const booking = req.body;
+  const result = await productCollection.insertOne(booking);
+  res.send(result);
 });
 
 // root api
