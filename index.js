@@ -48,6 +48,19 @@ app.get("/category/:id", async (req, res) => {
   res.send(category);
 });
 
+app.post("/category", async (req, res) => {
+  const booking = req.body;
+  const result = await brandCollection.insertOne(booking);
+  res.send(result);
+});
+app.delete("/category/:id", async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  const query = { _id: ObjectId(id) };
+  const result = await brandCollection.deleteOne(query);
+  res.send(result);
+});
+
 app.post("/booking", async (req, res) => {
   const booking = req.body;
   const result = await bookingCollection.insertOne(booking);
@@ -68,10 +81,17 @@ app.post("/users", async (req, res) => {
   const result = await userCollection.insertOne(booking);
   res.send(result);
 });
+
 app.post("/dashboard/products", async (req, res) => {
   const booking = req.body;
   const result = await productCollection.insertOne(booking);
   res.send(result);
+});
+app.get("/seller/products", async (req, res) => {
+  const email = req.query.email;
+  const query = { sellerEmail: email };
+  const category = await brandCollection.find(query).toArray();
+  res.send(category);
 });
 
 // root api
