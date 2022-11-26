@@ -34,6 +34,7 @@ const brandCollection = client.db("usedLaptop").collection("category");
 const bookingCollection = client.db("usedLaptop").collection("booking");
 const userCollection = client.db("usedLaptop").collection("users");
 const productCollection = client.db("usedLaptop").collection("products");
+const advertiseCollection = client.db("usedLaptop").collection("advertise");
 
 app.get("/category", async (req, res) => {
   const query = {};
@@ -92,6 +93,22 @@ app.get("/seller/products", async (req, res) => {
   const query = { sellerEmail: email };
   const category = await brandCollection.find(query).toArray();
   res.send(category);
+});
+app.get("/advertise", async (req, res) => {
+  const query = {};
+  const advertise = await advertiseCollection.find(query).toArray();
+  const productModel = advertise.map((ad) => ad.model);
+
+  const filter = {
+    model: { $in: productModel },
+  };
+  const advertiseProducts = await brandCollection.find(filter).toArray();
+  res.send(advertiseProducts);
+});
+app.post("/advertise", async (req, res) => {
+  const booking = req.body;
+  const result = await advertiseCollection.insertOne(booking);
+  res.send(result);
 });
 
 // root api
