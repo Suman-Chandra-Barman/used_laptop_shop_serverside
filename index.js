@@ -35,6 +35,7 @@ const bookingCollection = client.db("usedLaptop").collection("booking");
 const userCollection = client.db("usedLaptop").collection("users");
 const productCollection = client.db("usedLaptop").collection("products");
 const advertiseCollection = client.db("usedLaptop").collection("advertise");
+const reportCollection = client.db("usedLaptop").collection("reports");
 
 app.get("/category", async (req, res) => {
   const query = {};
@@ -138,6 +139,18 @@ app.get("/advertise", async (req, res) => {
 app.post("/advertise", async (req, res) => {
   const booking = req.body;
   const result = await advertiseCollection.insertOne(booking);
+  res.send(result);
+});
+
+app.get("/dashboard/reports", async (req, res) => {
+  const query = {};
+  const reports = await reportCollection.find(query).toArray();
+  res.send(reports);
+});
+
+app.post("/dashboard/reports", async (req, res) => {
+  const booking = req.body;
+  const result = await reportCollection.insertOne(booking);
   res.send(result);
 });
 
