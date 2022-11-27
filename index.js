@@ -83,6 +83,35 @@ app.post("/users", async (req, res) => {
   res.send(result);
 });
 
+app.get("/dashboard/all-sellers", async (req, res) => {
+  const query = {
+    account: "seller",
+  };
+  const sellers = await userCollection.find(query).toArray();
+  res.send(sellers);
+});
+app.delete("/dashboard/all-sellers/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: ObjectId(id) };
+  const result = await userCollection.deleteOne(query);
+  res.send(result);
+});
+
+app.get("/dashboard/all-buyers", async (req, res) => {
+  const query = {
+    account: { $eq: "buyer" },
+  };
+  const buyers = await userCollection.find(query).toArray();
+  res.send(buyers);
+});
+
+app.delete("/dashboard/all-buyers/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: ObjectId(id) };
+  const result = await userCollection.deleteOne(query);
+  res.send(result);
+});
+
 app.post("/dashboard/products", async (req, res) => {
   const booking = req.body;
   const result = await productCollection.insertOne(booking);
@@ -94,6 +123,7 @@ app.get("/seller/products", async (req, res) => {
   const category = await brandCollection.find(query).toArray();
   res.send(category);
 });
+
 app.get("/advertise", async (req, res) => {
   const query = {};
   const advertise = await advertiseCollection.find(query).toArray();
