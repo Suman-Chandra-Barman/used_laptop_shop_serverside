@@ -29,7 +29,7 @@ const dbConnect = async () => {
 };
 dbConnect();
 
-// collection
+// database collection
 const brandCollection = client.db("usedLaptop").collection("category");
 const bookingCollection = client.db("usedLaptop").collection("booking");
 const userCollection = client.db("usedLaptop").collection("users");
@@ -37,6 +37,7 @@ const productCollection = client.db("usedLaptop").collection("products");
 const advertiseCollection = client.db("usedLaptop").collection("advertise");
 const reportCollection = client.db("usedLaptop").collection("reports");
 
+// category api
 app.get("/category", async (req, res) => {
   const query = {};
   const category = await brandCollection.find(query).toArray();
@@ -67,6 +68,8 @@ app.post("/booking", async (req, res) => {
   const result = await bookingCollection.insertOne(booking);
   res.send(result);
 });
+
+// user api
 app.get("/users", async (req, res) => {
   try {
     const userEmail = req.query.email;
@@ -83,6 +86,7 @@ app.post("/users", async (req, res) => {
   res.send(result);
 });
 
+// dashboard api
 app.get("/dashboard/all-sellers", async (req, res) => {
   const query = {
     account: "seller",
@@ -124,6 +128,7 @@ app.get("/seller/products", async (req, res) => {
   res.send(category);
 });
 
+// advertise api
 app.get("/advertise", async (req, res) => {
   const query = {};
   const advertise = await advertiseCollection.find(query).toArray();
@@ -141,6 +146,7 @@ app.post("/advertise", async (req, res) => {
   res.send(result);
 });
 
+// reports api
 app.get("/dashboard/reports", async (req, res) => {
   const query = {};
   const reports = await reportCollection.find(query).toArray();
@@ -158,6 +164,14 @@ app.delete("/dashboard/reports/:id", async (req, res) => {
   const query = { _id: id };
   const result = await reportCollection.deleteOne(query);
   res.send(result);
+});
+
+// orders api
+app.get("/dashboard/my-orders/:email", async (req, res) => {
+  const email = req.params.email;
+  const query = { email: email };
+  const orders = await bookingCollection.find(query).toArray();
+  res.send(orders);
 });
 
 // root api
