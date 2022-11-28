@@ -57,7 +57,6 @@ app.post("/category", async (req, res) => {
 });
 app.delete("/category/:id", async (req, res) => {
   const id = req.params.id;
-  console.log(id);
   const query = { _id: ObjectId(id) };
   const result = await brandCollection.deleteOne(query);
   res.send(result);
@@ -151,6 +150,13 @@ app.get("/dashboard/reports", async (req, res) => {
 app.post("/dashboard/reports", async (req, res) => {
   const booking = req.body;
   const result = await reportCollection.insertOne(booking);
+  res.send(result);
+});
+
+app.delete("/dashboard/reports/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: id };
+  const result = await reportCollection.deleteOne(query);
   res.send(result);
 });
 
